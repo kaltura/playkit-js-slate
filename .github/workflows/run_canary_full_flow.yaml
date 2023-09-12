@@ -8,6 +8,10 @@ on:
       - master
 
 jobs:
+  test:
+    uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
+    secrets: inherit
+
   canary-full-flow:
     if: ${{ github.actor != 'PlaykitJs-Bot' }}
     uses: kaltura/ovp-pipelines-pub/.github/workflows/player_cicd.yaml@master
@@ -24,5 +28,6 @@ jobs:
       type: "plugin"
       stage: "canary"
       schema-type: "playerV3Versions"
+      node-version: "18.x"
       tests-yarn-run-to-execute: 'build lint:check types:check test'
-      
+
