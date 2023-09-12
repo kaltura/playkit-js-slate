@@ -1146,6 +1146,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@playkit-js/common@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.3.0.tgz#83ae6f206311f6771e1886368469723a82652ad1"
+  integrity sha512-CN5L6tI58mZ+7/WCHYWof1KlWujVx0+vNBOW5Ya1a/rOjRX3H/ls+W56BrtD0FjU0Fq0IA6CZmHO/YJtKcVg8w==
+  dependencies:
+    "@playkit-js/playkit-js-ui" "^0.77.1"
+    classnames "^2.3.2"
+    linkify-it "^4.0.1"
+
 "@playkit-js/kaltura-player-js@canary":
   version "3.14.6-canary.0-0cf6bf1"
   resolved "https://registry.yarnpkg.com/@playkit-js/kaltura-player-js/-/kaltura-player-js-3.14.6-canary.0-0cf6bf1.tgz#258bf820deebd52a5d0a4fa98ffa141a66eb4e0e"
@@ -1182,6 +1191,16 @@
   version "0.77.3-canary.0-6bce5fb"
   resolved "https://registry.yarnpkg.com/@playkit-js/playkit-js-ui/-/playkit-js-ui-0.77.3-canary.0-6bce5fb.tgz#66e259b41b43a45286ddeca50b0861c513ca58d9"
   integrity sha512-WAC4uWWjCQllOK6LsJ2kcARQleJHcvUomz/Vwpdts01fSJNDb0uboFSwXK0rIHw3PtNWXGFdEQDXUrwAEu/zeA==
+  dependencies:
+    preact "^10.3.4"
+    preact-i18n "^2.0.0-preactx.2"
+    react-redux "^7.2.0"
+    redux "^4.0.5"
+
+"@playkit-js/playkit-js-ui@^0.77.1":
+  version "0.77.6"
+  resolved "https://registry.yarnpkg.com/@playkit-js/playkit-js-ui/-/playkit-js-ui-0.77.6.tgz#9b7f40e449f4d888d15545d4c4893fcaf09ddae7"
+  integrity sha512-EyVUZBLOnoeYQLlsJ1cBL/ovji81AQagRy+z8mYESDYaiB8OtH03wCKIfemHmThBpqOYxaHCRtij4GLp4hfhMg==
   dependencies:
     preact "^10.3.4"
     preact-i18n "^2.0.0-preactx.2"
@@ -2189,6 +2208,11 @@ chrome-trace-event@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
+
+classnames@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
 
 cliui@^7.0.2:
   version "7.0.4"
@@ -4547,6 +4571,13 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
+linkify-it@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-4.0.1.tgz#01f1d5e508190d06669982ba31a7d9f56a5751ec"
+  integrity sha512-C7bfi1UZmoj8+PQx22XyeXCuBlokoyWQL5pWSP+EI6nzRylyThouddufc2c1NDIcP9k5agmN9fLpA7VNJfIiqw==
+  dependencies:
+    uc.micro "^1.0.1"
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
@@ -6772,6 +6803,11 @@ ua-parser-js@^0.7.30:
   version "0.7.31"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.31.tgz#649a656b191dffab4f21d5e053e27ca17cbff5c6"
   integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
+
+uc.micro@^1.0.1:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
+  integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
 uglify-js@^3.1.4:
   version "3.17.3"

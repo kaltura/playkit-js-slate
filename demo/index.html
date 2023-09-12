@@ -23,15 +23,13 @@
           translations: {
             "en": {
               "slate": {
-                "greeting": "Welcome"
+                "dismiss": "Dismiss"
               }
             }
           }
         },
         plugins: {
-          slate: {
-            developerName: 'Steve Jobs'
-          },
+          slate: {}
         }
       };
 
@@ -48,6 +46,16 @@
           ]
         }
       });
+
+      setTimeout(() => {
+        player.getService('slateManager')?.add({
+          title: 'Slate title',
+          message: 'Slate message',
+          showCloseButton: true,
+          customizedActionButtonText: 'Custom Action Button',
+          dismissButtonText: 'Close Slate'
+        });
+      }, 3000);
     </script>
   </body>
 </html>

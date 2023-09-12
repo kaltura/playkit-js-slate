@@ -24,91 +24,84 @@ and transpiled in ECMAScript5 using [Babel](https://babeljs.io/) and the [TypeSc
 
 ## Features
 
-  Write here your plugin description...
-    
-## Getting started with development
+  Slate plugin allows to inject a slate to the player UI, using its API.
 
-```sh
-# First, checkout the repository and install the required dependencies
+## services
+
+- ### Slate Manager
+  Manages and controls the slate, including:
+
+    - Adding a slate
+    - Removing a slate
+
+## Getting Started
+
+### Prerequisites
+
+The plugin requires [Kaltura Player] to be loaded first.
+
+[kaltura player]: https://github.com/kaltura/kaltura-player-js
+
+### Installing
+
+First, clone and run [yarn] to install dependencies:
+
+[yarn]: https://yarnpkg.com/lang/en/
+
+```
 git clone https://github.com/kaltura/playkit-js-slate.git
-
-# Navigate to the repo dir
 cd playkit-js-slate
-
-# Run dev-server for demo page (recompiles on file-watch, and write to actual dist fs artifacts)
-npm run dev
-
-# Before submitting a PR - Run the pre commit command
-npm run pre:commit
-
-# this command will run:
-
-# 1. types check
-# 2. lint check
-# 3. generate/update types
-# 4. generate/update docs
+yarn install
 ```
 
-The dev server will host files on port 8000. Once started, the demo can be found running at http://localhost:8000/.
+### Building
 
-Before submitting a PR, please see our [contribution guidelines](CONTRIBUTING.md).
+Then, build the plugin
 
-
-### Linter (ESlint)
-
-Run linter:
-
-```
-npm run lint:check
+```javascript
+yarn run build
 ```
 
-Run linter with auto-fix mode:
+### Testing
 
-```
-npm run lint:fix
-```
+The plugin uses `cypress` tool for e2e tests
 
-### Formatting Code
-
-Run prettier to format code
-
-```
-npm run prettier:fix
+```javascript
+yarn run test
 ```
 
-### Type Check
+UI conf file (`cypress/public/ui-conf.js`) contains Kaltura player and plugin dependencies.
+Keep Kaltura player and dependency versinos aligned to currently released versions.
 
-Run type-check to verify TypeScript types
+### Embed the library in your test page
 
+Finally, add the bundle as a script tag in your page, and initialize the player
+
+```html
+<script type="text/javascript" src="/PATH/TO/FILE/kaltura-player.js"></script>
+<!--Kaltura player-->
+<script type="text/javascript" src="/PATH/TO/FILE/playkit-slate.js"></script>
+<!--PlayKit info plugin-->
+<div id="player-placeholder" style="height:360px; width:640px">
+  <script type="text/javascript">
+    var playerContainer = document.querySelector("#player-placeholder");
+    var config = {
+     ...
+     targetId: 'player-placeholder',
+     plugins: {
+       slate: {}
+     }
+     ...
+    };
+    var player = KalturaPlayer.setup(config);
+    player.loadMedia(...);
+  </script>
+</div>
 ```
-npm run types:check
-```
 
-### Automated tests (Mocha/Karma)
+## Documentation
 
-Run all tests at once:
-
-```
-npm test
-```
-
-Run unit tests in watch mode:
-
-```
-npm run test:watch
-```
-
-## Design
-
-An overview of this project's design, can be found [here](https://kaltura.atlassian.net/wiki/spaces/PROD/pages/3554412657/Side+Panel+Manager+-+Design+Document).
-
-## API docs
-
-[API docs](https://kaltura.github.io/playkit-js-slate/docs/api/index.html)
-
-## Usage guide
-
-[usage guide](./docs/guide.md)
+- [API doc](./docs/api.md)
 
 ## Demo
 

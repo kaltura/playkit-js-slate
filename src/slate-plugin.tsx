@@ -1,29 +1,17 @@
-import { BasePlugin, ui } from '@playkit-js/kaltura-player-js';
-import { SlateConfig } from './types/slate-config';
+import {BasePlugin, KalturaPlayer} from '@playkit-js/kaltura-player-js';
 import { h } from 'preact';
-import { SomeComponent } from './ui/more-icon/some-component.component';
+import {SlateManager} from "./slate-manager/slate-manager";
 
 export const pluginName = 'slate';
 
-export class SlatePlugin extends BasePlugin<SlateConfig> {
-  protected static defaultConfig: SlateConfig = {
-    developerName: 'whoever you are'
-  };
+export class SlatePlugin extends BasePlugin<any> {
+  constructor(name: string, player: KalturaPlayer, config?: any) {
+    super(name, player, config);
+    //@ts-ignore
+    player.registerService('slateManager', new SlateManager(player, this.logger, (event: string) => this.dispatchEvent(event)));
+  }
 
   public static isValid(): boolean {
     return true;
-  }
-
-  protected loadMedia(): void {
-    this.addSomeComponent();
-  }
-
-  private addSomeComponent(): void {
-    this.player.ui.addComponent({
-      label: 'slate',
-      area: ui.ReservedPresetAreas.InteractiveArea,
-      presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
-      get: () => <SomeComponent developerName={this.config.developerName} />
-    });
   }
 }

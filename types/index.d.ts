@@ -5,4 +5,4 @@
     for external usage from the auto-generated './modules.d.ts' file
 */
 
-export { SlateConfig } from "types/slate-config";
+export { SlateOptions } from "types/slate-options";
