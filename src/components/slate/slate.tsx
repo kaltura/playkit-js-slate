@@ -137,9 +137,11 @@ export class Slate extends Component<SlateProps> {
       <OverlayPortal>
         <Overlay open onClose={closeSlate}>
           <div className={styles.slateRoot} data-testid="slate_root">
-            {showSpinner ? <Spinner size={this._getSpinnerSize()}/> : undefined}
-            {this._renderTextArea()}
-            {this._renderButtons()}
+            <div className={styles.slateContent} data-testid="slate_content">
+              {showSpinner ? <Spinner size={this._getSpinnerSize()}/> : undefined}
+              {this._renderTextArea()}
+              {this._renderButtons()}
+            </div>
           </div>
         </Overlay>
       </OverlayPortal>
