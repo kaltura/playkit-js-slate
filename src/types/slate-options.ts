@@ -1,7 +1,7 @@
 export type SlateOptions = {
   title?: string;
   message?: string;
-  backgroundImage?: string;
+  backgroundImageUrl?: string;
   showSpinner?: boolean;
   timeout?: number;
   showCloseButton?: boolean;

@@ -22,7 +22,7 @@ export class SlateManager {
     this._store = redux.useStore();
   }
 
-  public add(options: SlateOptions) {
+  public add(options?: SlateOptions) {
     if (this._store.getState().shell.playerSize === PLAYER_SIZE.TINY) return;
     if (!this._player.paused) {
       this._player.pause();
@@ -35,15 +35,15 @@ export class SlateManager {
         presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
         get: () => <Slate
           closeSlate={this._closeSlate}
-          title={options.title}
-          message={options.message}
-          showDismissButton={options.showDismissButton !== undefined ? options.showDismissButton : true}
-          showCloseButton={options.showCloseButton !== undefined ? options.showCloseButton : true}
-          dismissButtonText={options.dismissButtonText}
-          timeout={options.timeout}
-          backgroundImage={options.backgroundImage}
-          showSpinner={options.showSpinner !== undefined ? options.showSpinner : true}
-          customizedActionButtonText={options.customizedActionButtonText}
+          title={options?.title}
+          message={options?.message}
+          showDismissButton={options?.showDismissButton !== undefined ? options.showDismissButton : true}
+          showCloseButton={options?.showCloseButton !== undefined ? options.showCloseButton : true}
+          dismissButtonText={options?.dismissButtonText}
+          timeout={options?.timeout}
+          backgroundImageUrl={options?.backgroundImageUrl}
+          showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
+          customizedActionButtonText={options?.customizedActionButtonText}
           onCustomizedActionButtonClick={this._onCustomizedActionButtonClick}
         />
       })

@@ -20,7 +20,7 @@ type SlateProps = {
   closeSlate: OnClick,
   title?: string,
   message?: string,
-  backgroundImage?: string,
+  backgroundImageUrl?: string,
   showSpinner?: boolean,
   timeout?: number,
   showCloseButton?: boolean,
@@ -48,7 +48,7 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @withText(translates)
 export class Slate extends Component<SlateProps> {
   componentDidMount() {
-    const {showCloseButton, backgroundImage} = this.props;
+    const {showCloseButton, backgroundImageUrl} = this.props;
 
     // handle overlay close button
     const closeButtonEl = document.querySelector('.playkit-close-overlay') as any;
@@ -59,8 +59,8 @@ export class Slate extends Component<SlateProps> {
     // handle background image
     const overlayPortalEl = document.querySelector('.overlay-portal') as any;
     const overlayContentsEl = document.querySelector('.playkit-overlay-contents') as any;
-    if (backgroundImage && overlayPortalEl && overlayContentsEl) {
-      overlayPortalEl.style['background'] = `url(${backgroundImage})`;
+    if (backgroundImageUrl && overlayPortalEl && overlayContentsEl) {
+      overlayPortalEl.style['background'] = `url(${backgroundImageUrl})`;
       overlayContentsEl.style['background-color'] = 'transparent';
     }
 
@@ -112,7 +112,7 @@ export class Slate extends Component<SlateProps> {
     return (
       <div className={styles.slateTextArea}>
         {title && (
-          <div className={[styles.slateTitle].join(' ')} data-testid="slate_title">
+          <div className={styles.slateTitle} data-testid="slate_title">
             {title}
           </div>
         )}

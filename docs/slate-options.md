@@ -6,7 +6,7 @@
 const slateOptions = {
   title?: string, // optional
   message?: string, // optional
-  backgroundImage?: string, // optional
+  backgroundImageUrl?: string, // optional
   showSpinner?: boolean, // optional
   showCloseButton?: boolean, // optional
   showDismissButton?: boolean, // optional
@@ -40,7 +40,7 @@ const slateOptions = {
 >
 > ##
 
-> ### backgroundImage
+> ### backgroundImageUrl
 >
 > ##### Type: `string`
 >
