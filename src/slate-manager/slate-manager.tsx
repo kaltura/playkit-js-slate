@@ -3,38 +3,40 @@ import {SlateOptions} from "../types/slate-options";
 import {h} from "preact";
 import {Slate} from "../components/slate/slate";
 import {SlateEventTypes} from "../types/slate-event-types";
+// @ts-ignore
+import { FakeEventTarget, FakeEvent } from '@playkit-js/playkit-js';
 
 // @ts-ignore
 const {components, redux} = ui;
 const {PLAYER_SIZE} = components;
 
-export class SlateManager {
-  private _wasPlayed = false; // keep state of the player so we can resume if needed
-  private _removeActiveOverlay: null | Function = null;
-  private _store: any;
+export class SlateManager extends FakeEventTarget {
+  private wasPlayed = false; // keep state of the player so we can resume if needed
+  private removeActiveOverlay: null | Function = null;
+  private store: any;
 
   constructor(
-    private _player: KalturaPlayer,
-    private _logger: Logger,
-    private _dispatchSlateEvent: (event: string) => void
+    private player: KalturaPlayer,
+    private logger: Logger
   )
   {
-    this._store = redux.useStore();
+    super(player, logger);
+    this.store = redux.useStore();
   }
 
   public add(options?: SlateOptions) {
-    if (this._store.getState().shell.playerSize === PLAYER_SIZE.TINY) return;
-    if (!this._player.paused) {
-      this._player.pause();
-      this._wasPlayed = true;
+    if (this.store.getState().shell.playerSize === PLAYER_SIZE.TINY) return;
+    if (!this.player.paused) {
+      this.player.pause();
+      this.wasPlayed = true;
     }
-    this._setOverlay(
-      this._player.ui.addComponent({
+    this.setOverlay(
+      this.player.ui.addComponent({
         label: 'slate',
         area: ui.ReservedPresetAreas.GuiArea,
         presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
         get: () => <Slate
-          closeSlate={this._closeSlate}
+          onClose={this.onCloseHandler}
           title={options?.title}
           message={options?.message}
           showDismissButton={options?.showDismissButton !== undefined ? options.showDismissButton : true}
@@ -44,37 +46,38 @@ export class SlateManager {
           backgroundImageUrl={options?.backgroundImageUrl}
           showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
           customizedActionButtonText={options?.customizedActionButtonText}
-          onCustomizedActionButtonClick={this._onCustomizedActionButtonClick}
+          onCustomizedActionClick={this.onCustomizedActionClick}
         />
       })
     );
   }
 
   public remove() {
-    this._removeOverlay();
+    this.onCloseHandler();
   }
 
-  private _setOverlay = (fn: Function) => {
-    this._removeOverlay();
-    this._removeActiveOverlay = fn;
+  private setOverlay = (fn: Function) => {
+    this.removeOverlay();
+    this.removeActiveOverlay = fn;
   };
 
-  private _removeOverlay = () => {
-    if (this._removeActiveOverlay) {
-      this._removeActiveOverlay();
-      this._removeActiveOverlay = null;
+  private removeOverlay = () => {
+    if (this.removeActiveOverlay) {
+      this.removeActiveOverlay();
+      this.removeActiveOverlay = null;
     }
   };
 
-  private _closeSlate = () => {
-    this._removeOverlay();
-    if (this._wasPlayed) {
-      this._player.play();
-      this._wasPlayed = false;
+  private onCloseHandler = () => {
+    this.removeOverlay();
+    if (this.wasPlayed) {
+      this.player.play();
+      this.wasPlayed = false;
     }
   };
 
-  private _onCustomizedActionButtonClick = () => {
-    this._dispatchSlateEvent(SlateEventTypes.SLATE_CUSTOM_BUTTON_CLICKED);
+  private onCustomizedActionClick = () => {
+    //@ts-ignore
+    this.dispatchEvent(new FakeEvent(SlateEventTypes.SLATE_CUSTOM_BUTTON_CLICKED));
   }
 }

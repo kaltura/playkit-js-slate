@@ -17,7 +17,7 @@ const {
 } = ui;
 
 type SlateProps = {
-  closeSlate: OnClick,
+  onClose: OnClick,
   title?: string,
   message?: string,
   backgroundImageUrl?: string,
@@ -28,7 +28,7 @@ type SlateProps = {
   dismissButtonText?: string,
   customizedActionButtonText?: string,
   dismissLabel?: string,
-  onCustomizedActionButtonClick: (action: string) => void,
+  onCustomizedActionClick: (action: string) => void,
   playerSize?: string
 };
 
@@ -66,13 +66,13 @@ export class Slate extends Component<SlateProps> {
 
     if (this.props.timeout) {
       setTimeout(() => {
-        this.props.closeSlate(new MouseEvent('click'), false);
+        this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
     }
   }
 
-  _renderButtons = () => {
-    const {closeSlate, showDismissButton, customizedActionButtonText, dismissButtonText} = this.props;
+  private renderButtons = () => {
+    const {onClose, showDismissButton, customizedActionButtonText, dismissButtonText} = this.props;
     const dismissButtonLabel = dismissButtonText || this.props.dismissLabel;
     return (
       <div className={styles.slateButtonsWrapper}>
@@ -80,7 +80,7 @@ export class Slate extends Component<SlateProps> {
           <div className={styles.customizedActionButtonWrapper}>
             <Button
               type={ButtonType.primary}
-              onClick={() => this.props.onCustomizedActionButtonClick(customizedActionButtonText)}
+              onClick={() => this.props.onCustomizedActionClick(customizedActionButtonText)}
               tooltip={{label: customizedActionButtonText, className: ui.style.tooltip}}
               disabled={false}
               ariaLabel={customizedActionButtonText}
@@ -93,7 +93,7 @@ export class Slate extends Component<SlateProps> {
           <div className={styles.dismissWrapper}>
             <Button
               type={ButtonType.borderless}
-              onClick={closeSlate}
+              onClick={onClose}
               tooltip={{label: dismissButtonLabel!, className: ui.style.tooltip}}
               disabled={false}
               ariaLabel={dismissButtonLabel}
@@ -106,7 +106,7 @@ export class Slate extends Component<SlateProps> {
     )
   }
 
-  _renderTextArea = () => {
+  private renderTextArea = () => {
     const {title, message} = this.props;
     if (!title && !message) return undefined;
     return (
@@ -125,22 +125,22 @@ export class Slate extends Component<SlateProps> {
     );
   }
 
-  _getSpinnerSize = (): number => {
+  private getSpinnerSize = (): number => {
     const {playerSize} = this.props;
     if ([PLAYER_SIZE.EXTRA_SMALL, PLAYER_SIZE.SMALL].includes(playerSize)) return SPINNER_SIZE_EX_S_PLAYER;
     return SPINNER_SIZE_M_L_PLAYER;
   }
 
   render(): ComponentChild {
-    const {closeSlate, showSpinner} = this.props;
+    const {onClose, showSpinner} = this.props;
     return (
       <OverlayPortal>
-        <Overlay open onClose={closeSlate}>
+        <Overlay open onClose={onClose}>
           <div className={styles.slateRoot} data-testid="slate_root">
             <div className={styles.slateContent} data-testid="slate_content">
-              {showSpinner ? <Spinner size={this._getSpinnerSize()}/> : undefined}
-              {this._renderTextArea()}
-              {this._renderButtons()}
+              {showSpinner ? <Spinner size={this.getSpinnerSize()}/> : undefined}
+              {this.renderTextArea()}
+              {this.renderButtons()}
             </div>
           </div>
         </Overlay>

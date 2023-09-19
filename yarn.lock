@@ -209,6 +209,14 @@
     js-logger "^1.6.0"
     ua-parser-js "1.0.2"
 
+"@playkit-js/playkit-js@canary":
+  version "0.82.8-canary.0-f93661e"
+  resolved "https://registry.yarnpkg.com/@playkit-js/playkit-js/-/playkit-js-0.82.8-canary.0-f93661e.tgz#3863ff0cd5e8e2587725185306a86fb30073fdf4"
+  integrity sha512-EYIKFRSBd0Th6CU/GNoY6jvKJD78rNoHtv+FxFoVEobHzdADtmiv1QyZU9U3sX4FTz4wSnHcrsDdn/ahBvKxwg==
+  dependencies:
+    js-logger "^1.6.0"
+    ua-parser-js "1.0.2"
+
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
