@@ -11,8 +11,6 @@ jobs:
   tests:
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
     secrets: inherit
-    with:
-      yarn-run-to-execute: 'build lint:check test'
 
   notification:
     if: always()
