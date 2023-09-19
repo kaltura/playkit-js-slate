@@ -1,25 +1,25 @@
-import {KalturaPlayer, Logger, ui} from "@playkit-js/kaltura-player-js";
-import {SlateOptions} from "../types/slate-options";
-import {h} from "preact";
-import {Slate} from "../components/slate/slate";
-import {SlateEventTypes} from "../types/slate-event-types";
+// These lint rules are temporarily disabled until our fully typescript support is added
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { KalturaPlayer, Logger, ui } from '@playkit-js/kaltura-player-js';
+import { SlateOptions } from '../types/slate-options';
+import { h } from 'preact';
+import { Slate } from '../components/slate/slate';
+import { SlateEventTypes } from '../types/slate-event-types';
 // @ts-ignore
 import { FakeEventTarget, FakeEvent } from '@playkit-js/playkit-js';
 
 // @ts-ignore
-const {components, redux} = ui;
-const {PLAYER_SIZE} = components;
+const { components, redux } = ui;
+const { PLAYER_SIZE } = components;
 
 export class SlateManager extends FakeEventTarget {
   private wasPlayed = false; // keep state of the player so we can resume if needed
-  private removeActiveOverlay: null | Function = null;
+  private removeActiveOverlay: null | (() => void) = null;
   private store: any;
 
-  constructor(
-    private player: KalturaPlayer,
-    private logger: Logger
-  )
-  {
+  constructor(private player: KalturaPlayer, private logger: Logger) {
     super(player, logger);
     this.store = redux.useStore();
   }
@@ -35,19 +35,21 @@ export class SlateManager extends FakeEventTarget {
         label: 'slate',
         area: ui.ReservedPresetAreas.GuiArea,
         presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
-        get: () => <Slate
-          onClose={this.onCloseHandler}
-          title={options?.title}
-          message={options?.message}
-          showDismissButton={options?.showDismissButton !== undefined ? options.showDismissButton : true}
-          showCloseButton={options?.showCloseButton !== undefined ? options.showCloseButton : true}
-          dismissButtonText={options?.dismissButtonText}
-          timeout={options?.timeout}
-          backgroundImageUrl={options?.backgroundImageUrl}
-          showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
-          customizedActionButtonText={options?.customizedActionButtonText}
-          onCustomizedActionClick={this.onCustomizedActionClick}
-        />
+        get: () => (
+          <Slate
+            onClose={this.onCloseHandler}
+            title={options?.title}
+            message={options?.message}
+            showDismissButton={options?.showDismissButton !== undefined ? options.showDismissButton : true}
+            showCloseButton={options?.showCloseButton !== undefined ? options.showCloseButton : true}
+            dismissButtonText={options?.dismissButtonText}
+            timeout={options?.timeout}
+            backgroundImageUrl={options?.backgroundImageUrl}
+            showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
+            customizedActionButtonText={options?.customizedActionButtonText}
+            onCustomizedActionClick={this.onCustomizedActionClick}
+          />
+        )
       })
     );
   }
@@ -56,7 +58,7 @@ export class SlateManager extends FakeEventTarget {
     this.onCloseHandler();
   }
 
-  private setOverlay = (fn: Function) => {
+  private setOverlay = (fn: () => void) => {
     this.removeOverlay();
     this.removeActiveOverlay = fn;
   };
@@ -79,5 +81,5 @@ export class SlateManager extends FakeEventTarget {
   private onCustomizedActionClick = () => {
     //@ts-ignore
     this.dispatchEvent(new FakeEvent(SlateEventTypes.SLATE_CUSTOM_BUTTON_CLICKED));
-  }
+  };
 }

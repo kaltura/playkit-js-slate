@@ -11,7 +11,7 @@ Each service manages a different area of UI functionality.
 
 It relies on [kaltura player] core API for managing UI features.
 
-playkit-js-slate is written in [ECMAScript6] (`*.js`) and [TypeScript] (`*.ts`) (strongly typed superset of ES6), 
+playkit-js-slate is written in [ECMAScript6] (`*.js`) and [TypeScript] (`*.ts`) (strongly typed superset of ES6),
 and transpiled in ECMAScript5 using [Babel](https://babeljs.io/) and the [TypeScript compiler].
 
 [Webpack] is used to build the distro bundle and serve the local development environment.
@@ -24,15 +24,16 @@ and transpiled in ECMAScript5 using [Babel](https://babeljs.io/) and the [TypeSc
 
 ## Features
 
-  Slate plugin allows to inject a slate to the player UI, using its API.
+Slate plugin allows to inject a slate to the player UI, using its API.
 
 ## services
 
 - ### Slate Manager
+
   Manages and controls the slate, including:
 
-    - Adding a slate
-    - Removing a slate
+  - Adding a slate
+  - Removing a slate
 
 ## Getting Started
 
@@ -106,7 +107,6 @@ Finally, add the bundle as a script tag in your page, and initialize the player
 ## Demo
 
 [https://kaltura.github.io/playkit-js-slate/demo/index.html](https://kaltura.github.io/playkit-js-slate/demo/index.html)
-
 
 ## Compatibility
 

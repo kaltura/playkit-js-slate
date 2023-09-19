@@ -1,11 +1,11 @@
 const getPlayer = () => {
   // @ts-ignore
-  return cy.window().then($win => $win.KalturaPlayer.getPlayers()['player-placeholder']);
+  return cy.window().then(($win) => $win.KalturaPlayer.getPlayers()['player-placeholder']);
 };
 
 const preparePage = (pluginConf = {}, playbackConf = {}) => {
   cy.visit('index.html');
-  return cy.window().then(win => {
+  return cy.window().then((win) => {
     try {
       // @ts-ignore
       var kalturaPlayer = win.KalturaPlayer.setup({
@@ -47,5 +47,7 @@ const preparePage = (pluginConf = {}, playbackConf = {}) => {
 };
 
 export const loadPlayer = (pluginConf = {}, playbackConf = {}) => {
-  return preparePage(pluginConf, playbackConf).then(() => getPlayer().then(kalturaPlayer => kalturaPlayer.ready().then(() => kalturaPlayer)));
+  return preparePage(pluginConf, playbackConf).then(() =>
+    getPlayer().then((kalturaPlayer) => kalturaPlayer.ready().then(() => kalturaPlayer))
+  );
 };

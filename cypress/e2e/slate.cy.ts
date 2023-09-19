@@ -1,11 +1,9 @@
-import {
-  loadPlayer
-} from './utils';
+import { loadPlayer } from './utils';
 
 describe('Slate plugin', () => {
   describe('add API', () => {
     it('should add a slate with default capabilities', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message'
@@ -21,7 +19,7 @@ describe('Slate plugin', () => {
     });
 
     it('should add a slate without spinner', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message',
@@ -33,7 +31,7 @@ describe('Slate plugin', () => {
     });
 
     it('should add a slate without dismiss button', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message',
@@ -45,7 +43,7 @@ describe('Slate plugin', () => {
     });
 
     it('should add a slate without close overlay button', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message',
@@ -57,19 +55,19 @@ describe('Slate plugin', () => {
     });
 
     it('should close the overlay when clicking on dismiss button', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message'
         });
         cy.get('[data-testid="slate_root"]').should('exist');
-        cy.get('[data-testid="slate_dismissButton"]').should('exist').click({force: true});
+        cy.get('[data-testid="slate_dismissButton"]').should('exist').click({ force: true });
         cy.get('[data-testid="slate_root"]').should('not.exist');
       });
     });
 
     it('should add a slate with customized action button', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           title: 'Slate title',
           message: 'Slate message',
@@ -81,7 +79,7 @@ describe('Slate plugin', () => {
     });
 
     it('should add a slate without title and message', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({});
         cy.get('[data-testid="slate_root"]').should('exist');
         cy.get('[data-testid="slate_title"]').should('not.exist');
@@ -90,17 +88,20 @@ describe('Slate plugin', () => {
     });
 
     it('should add a slate with background image', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
-          backgroundImageUrl: 'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100'
+          backgroundImageUrl:
+            'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100'
         });
         cy.get('[data-testid="slate_root"]').should('exist');
-        cy.get('.overlay-portal').should('have.css', 'background').and('include', 'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100');
+        cy.get('.overlay-portal')
+          .should('have.css', 'background')
+          .and('include', 'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100');
       });
     });
 
     it('should add a slate and remove it after 2 seconds, per timeout option', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add({
           timeout: 2000
         });
@@ -112,7 +113,7 @@ describe('Slate plugin', () => {
 
   describe('remove API', () => {
     it('should remove a slate', () => {
-      loadPlayer().then(player => {
+      loadPlayer().then((player) => {
         player.getService('slateManager')?.add();
         cy.get('[data-testid="slate_root"]').should('exist');
         cy.wait(500).then(() => {

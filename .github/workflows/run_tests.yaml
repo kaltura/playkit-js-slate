@@ -5,7 +5,7 @@ run-name: Player And Plugin Tests
 on:
   pull_request:
     branches:
-      - "*"
+      - '*'
 
 jobs:
   tests:

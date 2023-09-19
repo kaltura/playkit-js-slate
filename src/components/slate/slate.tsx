@@ -1,35 +1,39 @@
-import {Component, ComponentChild, h} from 'preact';
-import {ui} from '@playkit-js/kaltura-player-js';
+// These lint rules are temporarily disabled until our fully typescript support is added
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+//@ts-nocheck
+import { Component, ComponentChild, h } from 'preact';
+import { ui } from '@playkit-js/kaltura-player-js';
 import * as styles from './slate.scss';
-import {OverlayPortal} from '@playkit-js/common/dist/hoc/overlay-portal';
-import {OnClick} from '@playkit-js/common/dist/hoc/a11y-wrapper';
-import {Button, ButtonType} from "@playkit-js/common";
-import {Spinner} from "@playkit-js/common/dist/components/spinner/spinner";
+import { OverlayPortal } from '@playkit-js/common/dist/hoc/overlay-portal';
+import { OnClick } from '@playkit-js/common/dist/hoc/a11y-wrapper';
+import { Button, ButtonType } from '@playkit-js/common';
+import { Spinner } from '@playkit-js/common/dist/components/spinner/spinner';
 
 // @ts-ignore
-const {Overlay} = ui.Components;
+const { Overlay } = ui.Components;
 const { Text, withText } = ui.preacti18n;
 // @ts-ignore
-const {components} = ui;
-const {PLAYER_SIZE} = components;
+const { components } = ui;
+const { PLAYER_SIZE } = components;
 const {
   redux: { connect }
 } = ui;
 
 type SlateProps = {
-  onClose: OnClick,
-  title?: string,
-  message?: string,
-  backgroundImageUrl?: string,
-  showSpinner?: boolean,
-  timeout?: number,
-  showCloseButton?: boolean,
-  showDismissButton?: boolean,
-  dismissButtonText?: string,
-  customizedActionButtonText?: string,
-  dismissLabel?: string,
-  onCustomizedActionClick: (action: string) => void,
-  playerSize?: string
+  onClose: OnClick;
+  title?: string;
+  message?: string;
+  backgroundImageUrl?: string;
+  showSpinner?: boolean;
+  timeout?: number;
+  showCloseButton?: boolean;
+  showDismissButton?: boolean;
+  dismissButtonText?: string;
+  customizedActionButtonText?: string;
+  dismissLabel?: string;
+  onCustomizedActionClick: (action: string) => void;
+  playerSize?: string;
 };
 
 const translates = {
@@ -47,8 +51,8 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
-  componentDidMount() {
-    const {showCloseButton, backgroundImageUrl} = this.props;
+  public componentDidMount() {
+    const { showCloseButton, backgroundImageUrl } = this.props;
 
     // handle overlay close button
     const closeButtonEl = document.querySelector('.playkit-close-overlay') as any;
@@ -72,7 +76,7 @@ export class Slate extends Component<SlateProps> {
   }
 
   private renderButtons = () => {
-    const {onClose, showDismissButton, customizedActionButtonText, dismissButtonText} = this.props;
+    const { onClose, showDismissButton, customizedActionButtonText, dismissButtonText } = this.props;
     const dismissButtonLabel = dismissButtonText || this.props.dismissLabel;
     return (
       <div className={styles.slateButtonsWrapper}>
@@ -81,10 +85,11 @@ export class Slate extends Component<SlateProps> {
             <Button
               type={ButtonType.primary}
               onClick={() => this.props.onCustomizedActionClick(customizedActionButtonText)}
-              tooltip={{label: customizedActionButtonText, className: ui.style.tooltip}}
+              tooltip={{ label: customizedActionButtonText, className: ui.style.tooltip }}
               disabled={false}
               ariaLabel={customizedActionButtonText}
-              testId={'slate_customizedActionButton'}>
+              testId={'slate_customizedActionButton'}
+            >
               {customizedActionButtonText}
             </Button>
           </div>
@@ -94,20 +99,21 @@ export class Slate extends Component<SlateProps> {
             <Button
               type={ButtonType.borderless}
               onClick={onClose}
-              tooltip={{label: dismissButtonLabel!, className: ui.style.tooltip}}
+              tooltip={{ label: dismissButtonLabel!, className: ui.style.tooltip }}
               disabled={false}
               ariaLabel={dismissButtonLabel}
-              testId={'slate_dismissButton'}>
+              testId={'slate_dismissButton'}
+            >
               {dismissButtonLabel}
             </Button>
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   private renderTextArea = () => {
-    const {title, message} = this.props;
+    const { title, message } = this.props;
     if (!title && !message) return undefined;
     return (
       <div className={styles.slateTextArea}>
@@ -123,22 +129,22 @@ export class Slate extends Component<SlateProps> {
         )}
       </div>
     );
-  }
+  };
 
   private getSpinnerSize = (): number => {
-    const {playerSize} = this.props;
+    const { playerSize } = this.props;
     if ([PLAYER_SIZE.EXTRA_SMALL, PLAYER_SIZE.SMALL].includes(playerSize)) return SPINNER_SIZE_EX_S_PLAYER;
     return SPINNER_SIZE_M_L_PLAYER;
-  }
+  };
 
-  render(): ComponentChild {
-    const {onClose, showSpinner} = this.props;
+  public render(): ComponentChild {
+    const { onClose, showSpinner } = this.props;
     return (
       <OverlayPortal>
         <Overlay open onClose={onClose}>
           <div className={styles.slateRoot} data-testid="slate_root">
             <div className={styles.slateContent} data-testid="slate_content">
-              {showSpinner ? <Spinner size={this.getSpinnerSize()}/> : undefined}
+              {showSpinner ? <Spinner size={this.getSpinnerSize()} /> : undefined}
               {this.renderTextArea()}
               {this.renderButtons()}
             </div>

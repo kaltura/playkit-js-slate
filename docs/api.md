@@ -6,13 +6,15 @@ the available APIs are:
 - remove
 
 ## add
+
 adds a slate to the player.
 
-in order to use the ```add``` API, you need to provide an object which contains options of the slate.
+in order to use the `add` API, you need to provide an object which contains options of the slate.
 
-see more information about the ```SlateOptions``` object [here](./slate-options.md). 
+see more information about the `SlateOptions` object [here](./slate-options.md).
 
 ### example of usage
+
 ```
 const slateOptions = {
     title: 'Slate title',
@@ -24,9 +26,11 @@ player.getService('slateManager').add(slateOptions);
 ```
 
 ## remove
+
 removes a slate from the player.
 
 ### example of usage
+
 ```
 player.getService('slateManager').remove();
 ```

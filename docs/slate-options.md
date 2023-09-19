@@ -26,7 +26,6 @@ const slateOptions = {
 >
 > ##### Description: the title of the slate.
 >
->
 > ##
 
 > ### message
@@ -36,7 +35,6 @@ const slateOptions = {
 > ##### Default: `undefined`
 >
 > ##### Description: the message of the slate.
->
 >
 > ##
 
@@ -48,7 +46,6 @@ const slateOptions = {
 >
 > ##### Description: the background image URL of the slate.
 >
->
 > ##
 
 > ### showSpinner
@@ -58,7 +55,6 @@ const slateOptions = {
 > ##### Default: `true`
 >
 > ##### Description: whether to show the spinner or not.
->
 >
 > ##
 
@@ -70,7 +66,6 @@ const slateOptions = {
 >
 > ##### Description: whether to show the slate close button or not.
 >
->
 > ##
 
 > ### showDismissButton
@@ -80,7 +75,6 @@ const slateOptions = {
 > ##### Default: `true`
 >
 > ##### Description: whether to show the slate dismiss button or not.
->
 >
 > ##
 
@@ -92,7 +86,6 @@ const slateOptions = {
 >
 > ##### Description: the text on the Dismiss button can be replaced by this option.
 >
->
 > ##
 
 > ### customizedActionButtonText
@@ -102,7 +95,6 @@ const slateOptions = {
 > ##### Default: `undefined`
 >
 > ##### Description: a text for an additional a customized action button in the slate.
->
 >
 > ##
 

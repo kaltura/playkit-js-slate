@@ -1,7 +1,11 @@
-import {BasePlugin, KalturaPlayer} from '@playkit-js/kaltura-player-js';
+// These lint rules are temporarily disabled until our fully typescript support is added
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import { BasePlugin, KalturaPlayer } from '@playkit-js/kaltura-player-js';
 import { h } from 'preact';
-import {SlateManager} from "./slate-manager/slate-manager";
-import {SlateEventTypes} from "./types/slate-event-types";
+import { SlateManager } from './slate-manager/slate-manager';
+import { SlateEventTypes } from './types/slate-event-types';
 // @ts-ignore
 import { FakeEvent } from '@playkit-js/playkit-js';
 
