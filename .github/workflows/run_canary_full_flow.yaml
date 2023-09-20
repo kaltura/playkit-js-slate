@@ -29,4 +29,4 @@ jobs:
       stage: 'canary'
       schema-type: 'playerV3Versions'
       node-version: '18.x'
-      tests-yarn-run-to-execute: 'build lint:check test'
+      tests-yarn-run-to-execute: 'build lint:check types:check test'

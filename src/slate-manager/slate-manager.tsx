@@ -24,7 +24,7 @@ export class SlateManager extends FakeEventTarget {
     this.store = redux.useStore();
   }
 
-  public add(options?: SlateOptions) {
+  public add(options?: SlateOptions): void {
     if (this.store.getState().shell.playerSize === PLAYER_SIZE.TINY) return;
     if (!this.player.paused) {
       this.player.pause();
@@ -37,7 +37,7 @@ export class SlateManager extends FakeEventTarget {
         presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
         get: () => (
           <Slate
-            onClose={this.onCloseHandler}
+            onClose={(): void => this.onCloseHandler()}
             title={options?.title}
             message={options?.message}
             showDismissButton={options?.showDismissButton !== undefined ? options.showDismissButton : true}
@@ -47,39 +47,39 @@ export class SlateManager extends FakeEventTarget {
             backgroundImageUrl={options?.backgroundImageUrl}
             showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
             customizedActionButtonText={options?.customizedActionButtonText}
-            onCustomizedActionClick={this.onCustomizedActionClick}
+            onCustomizedActionClick={(): void => this.onCustomizedActionClick()}
           />
         )
       })
     );
   }
 
-  public remove() {
+  public remove(): void {
     this.onCloseHandler();
   }
 
-  private setOverlay = (fn: () => void) => {
+  private setOverlay(fn: () => void): void {
     this.removeOverlay();
     this.removeActiveOverlay = fn;
-  };
+  }
 
-  private removeOverlay = () => {
+  private removeOverlay(): void {
     if (this.removeActiveOverlay) {
       this.removeActiveOverlay();
       this.removeActiveOverlay = null;
     }
-  };
+  }
 
-  private onCloseHandler = () => {
+  private onCloseHandler(): void {
     this.removeOverlay();
     if (this.wasPlayed) {
       this.player.play();
       this.wasPlayed = false;
     }
-  };
+  }
 
-  private onCustomizedActionClick = () => {
+  private onCustomizedActionClick(): void {
     //@ts-ignore
     this.dispatchEvent(new FakeEvent(SlateEventTypes.SLATE_CUSTOM_BUTTON_CLICKED));
-  };
+  }
 }

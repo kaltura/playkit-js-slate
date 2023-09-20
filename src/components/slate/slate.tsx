@@ -40,7 +40,7 @@ const translates = {
   dismissLabel: <Text id="slate.dismiss">Dismiss</Text>
 };
 
-const mapStateToProps = (state: Record<string, any>) => ({
+const mapStateToProps = (state: Record<string, any>): void => ({
   playerSize: state.shell.playerSize
 });
 
@@ -51,7 +51,7 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
-  public componentDidMount() {
+  public componentDidMount(): void {
     const { showCloseButton, backgroundImageUrl } = this.props;
 
     // handle overlay close button
@@ -75,7 +75,7 @@ export class Slate extends Component<SlateProps> {
     }
   }
 
-  private renderButtons = () => {
+  private renderButtons(): void {
     const { onClose, showDismissButton, customizedActionButtonText, dismissButtonText } = this.props;
     const dismissButtonLabel = dismissButtonText || this.props.dismissLabel;
     return (
@@ -84,7 +84,7 @@ export class Slate extends Component<SlateProps> {
           <div className={styles.customizedActionButtonWrapper}>
             <Button
               type={ButtonType.primary}
-              onClick={() => this.props.onCustomizedActionClick(customizedActionButtonText)}
+              onClick={(): void => this.props.onCustomizedActionClick(customizedActionButtonText)}
               tooltip={{ label: customizedActionButtonText, className: ui.style.tooltip }}
               disabled={false}
               ariaLabel={customizedActionButtonText}
@@ -110,9 +110,9 @@ export class Slate extends Component<SlateProps> {
         )}
       </div>
     );
-  };
+  }
 
-  private renderTextArea = () => {
+  private renderTextArea(): void {
     const { title, message } = this.props;
     if (!title && !message) return undefined;
     return (
@@ -129,13 +129,13 @@ export class Slate extends Component<SlateProps> {
         )}
       </div>
     );
-  };
+  }
 
-  private getSpinnerSize = (): number => {
+  private getSpinnerSize(): number {
     const { playerSize } = this.props;
     if ([PLAYER_SIZE.EXTRA_SMALL, PLAYER_SIZE.SMALL].includes(playerSize)) return SPINNER_SIZE_EX_S_PLAYER;
     return SPINNER_SIZE_M_L_PLAYER;
-  };
+  }
 
   public render(): ComponentChild {
     const { onClose, showSpinner } = this.props;

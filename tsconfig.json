@@ -1,23 +1,26 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
     "target": "ES5",
-    "module": "commonjs",
-    "allowJs": false,
+    "rootDir": ".",
+    "outDir": "build",
+    "preserveSymlinks": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "sourceMap": true,
+    "jsxFragmentFactory": "Fragment",
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2018", "dom"],
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "pretty": true,
     "strict": true,
-    "moduleResolution": "Node",
-    "baseUrl": "..",
-    "preserveSymlinks": true,
-    "paths": {
-      "*": ["../node_modules/*", "./src", "cypress.config.ts"]
-    },
-    "types": ["cypress", "node"],
-    "lib": ["es2015", "dom"]
+    "experimentalDecorators": true,
+    "downlevelIteration": true,
+    "types": ["cypress", "node"]
   },
-  "include": ["cypress/e2e/*.ts", "src/**/*.tsx", "src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules"]
 }
