@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  fileServerFolder: 'test/public',
+  fileServerFolder: 'cypress/public',
   experimentalWebKitSupport: true,
   defaultCommandTimeout: 30000,
   e2e: {
