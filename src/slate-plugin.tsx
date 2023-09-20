@@ -1,29 +1,37 @@
-import { BasePlugin, ui } from '@playkit-js/kaltura-player-js';
-import { SlateConfig } from './types/slate-config';
+import { BasePlugin, KalturaPlayer } from '@playkit-js/kaltura-player-js';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h } from 'preact';
-import { SomeComponent } from './ui/more-icon/some-component.component';
+import { SlateManager } from './slate-manager/slate-manager';
+import { SlateEventTypes } from './types/slate-event-types';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { FakeEvent } from '@playkit-js/playkit-js';
 
 export const pluginName = 'slate';
 
-export class SlatePlugin extends BasePlugin<SlateConfig> {
-  protected static defaultConfig: SlateConfig = {
-    developerName: 'whoever you are'
-  };
+export class SlatePlugin extends BasePlugin<Record<string, never>> {
+  private readonly slateManager: SlateManager;
+
+  constructor(name: string, player: KalturaPlayer, config?: Record<string, never>) {
+    super(name, player, config);
+    this.slateManager = new SlateManager(player, this.logger);
+    player.registerService('slateManager', this.slateManager);
+    this.addBindings();
+  }
+
+  private addBindings(): void {
+    Object.values(SlateEventTypes).forEach((slateEventType: string) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      this.eventManager.listen(this.slateManager, slateEventType, (e: FakeEvent) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        return this.dispatchEvent(e.type, e.payload);
+      });
+    });
+  }
 
   public static isValid(): boolean {
     return true;
-  }
-
-  protected loadMedia(): void {
-    this.addSomeComponent();
-  }
-
-  private addSomeComponent(): void {
-    this.player.ui.addComponent({
-      label: 'slate',
-      area: ui.ReservedPresetAreas.InteractiveArea,
-      presets: [ui.ReservedPresetNames.Playback, ui.ReservedPresetNames.Live],
-      get: () => <SomeComponent developerName={this.config.developerName} />
-    });
   }
 }

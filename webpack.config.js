@@ -46,6 +46,7 @@ module.exports = (env, { mode }) => {
     output: {
       filename: 'playkit-slate.js',
       path: path.resolve(__dirname, 'dist'),
+      library: ['KalturaPlayer', 'plugins', 'slate'],
       clean: true
     },
     externals: {

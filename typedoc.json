@@ -1,7 +1,5 @@
 {
-  "entryPoints": [
-    "src/types/slate-config.ts"
-  ],
+  "entryPoints": ["src/types/slate-config.ts"],
   "out": "docs/api",
   "excludePrivate": true,
   "excludeProtected": true,
