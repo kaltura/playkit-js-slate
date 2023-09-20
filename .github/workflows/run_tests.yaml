@@ -9,10 +9,8 @@ on:
 
 jobs:
   tests:
-    secrets: inherit
     uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
-    with:
-      yarn-run-to-execute: 'build lint:check types:check test'
+    secrets: inherit
 
   notification:
     if: always()
