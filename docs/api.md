@@ -1,4 +1,4 @@
-#Slate Plugin API
+# Slate Plugin API
 
 the available APIs are:
 
