@@ -6,7 +6,7 @@ import { SlateEventTypes } from './types/slate-event-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { FakeEvent } from '@playkit-js/playkit-js';
-import {SlateConfig} from "./types/slate-config";
+import { SlateConfig } from './types/slate-config';
 
 export const pluginName = 'slate';
 
@@ -19,7 +19,7 @@ export class SlatePlugin extends BasePlugin<SlateConfig> {
     imageOnMediaLoad: '',
     titleOnMediaLoad: '',
     messageOnMediaLoad: '',
-    dismissTextOnMediaLoad: 'Dismiss',
+    dismissTextOnMediaLoad: 'Dismiss'
   };
 
   constructor(name: string, player: KalturaPlayer, config: SlateConfig) {
@@ -41,8 +41,11 @@ export class SlatePlugin extends BasePlugin<SlateConfig> {
     });
   }
 
-  public loadMedia() {
-    if (this.player.sources.metadata?.tags?.toString().includes(SLATE_PRE_ROLL_TAG) && (this.config.titleOnMediaLoad || this.config.messageOnMediaLoad)) {
+  public loadMedia(): void {
+    if (
+      this.player.sources.metadata?.tags?.toString().includes(SLATE_PRE_ROLL_TAG) &&
+      (this.config.titleOnMediaLoad || this.config.messageOnMediaLoad)
+    ) {
       this.slateManager.add({
         title: this.config.titleOnMediaLoad,
         message: this.config.messageOnMediaLoad,
