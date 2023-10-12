@@ -65,6 +65,7 @@ export class Slate extends Component<SlateProps> {
     const overlayContentsEl = document.querySelector('.playkit-overlay-contents') as any;
     if (backgroundImageUrl && overlayPortalEl && overlayContentsEl) {
       overlayPortalEl.style['background'] = `url(${backgroundImageUrl})`;
+      overlayPortalEl.style['background-size'] = 'contain';
       overlayContentsEl.style['background-color'] = 'transparent';
     }
 
@@ -72,6 +73,13 @@ export class Slate extends Component<SlateProps> {
       setTimeout(() => {
         this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
+    }
+  }
+
+  public componentWillUnmount(): void {
+    const overlayPortalEl = document.querySelector('.overlay-portal') as any;
+    if (this.props.backgroundImageUrl && overlayPortalEl) {
+      overlayPortalEl.style['background'] = '';
     }
   }
 

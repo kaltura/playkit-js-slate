@@ -9,6 +9,8 @@ import { FakeEvent } from '@playkit-js/playkit-js';
 
 export const pluginName = 'slate';
 
+const SLATE_PRE_ROLL_TAG = 'slate_pre_roll';
+
 export class SlatePlugin extends BasePlugin<Record<string, never>> {
   private readonly slateManager: SlateManager;
 
@@ -29,6 +31,20 @@ export class SlatePlugin extends BasePlugin<Record<string, never>> {
         return this.dispatchEvent(e.type, e.payload);
       });
     });
+  }
+
+  public loadMedia() {
+    if (this.player.sources.metadata?.tags?.toString().includes(SLATE_PRE_ROLL_TAG)) {
+      this.slateManager.add({
+        backgroundImageUrl: 'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_6oeqd8cr/width/560/quality/100',
+        showSpinner: false,
+        showDismissButton: false
+      });
+    }
+  }
+
+  public reset(): void {
+    this.slateManager.remove();
   }
 
   public static isValid(): boolean {
