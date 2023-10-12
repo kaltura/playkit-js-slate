@@ -16,7 +16,10 @@ export class SlatePlugin extends BasePlugin<SlateConfig> {
   private readonly slateManager: SlateManager;
 
   protected static defaultConfig: SlateConfig = {
-    imageOnMediaLoad: ''
+    imageOnMediaLoad: '',
+    titleOnMediaLoad: '',
+    messageOnMediaLoad: '',
+    dismissTextOnMediaLoad: 'Dismiss',
   };
 
   constructor(name: string, player: KalturaPlayer, config: SlateConfig) {
@@ -39,11 +42,12 @@ export class SlatePlugin extends BasePlugin<SlateConfig> {
   }
 
   public loadMedia() {
-    if (this.player.sources.metadata?.tags?.toString().includes(SLATE_PRE_ROLL_TAG) && this.config.imageOnMediaLoad) {
+    if (this.player.sources.metadata?.tags?.toString().includes(SLATE_PRE_ROLL_TAG) && (this.config.titleOnMediaLoad || this.config.messageOnMediaLoad)) {
       this.slateManager.add({
-        backgroundImageUrl: this.config.imageOnMediaLoad,
-        showSpinner: false,
-        showDismissButton: false
+        title: this.config.titleOnMediaLoad,
+        message: this.config.messageOnMediaLoad,
+        dismissButtonText: this.config.dismissTextOnMediaLoad,
+        showSpinner: false
       });
     }
   }
