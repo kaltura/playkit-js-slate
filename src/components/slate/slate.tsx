@@ -51,6 +51,8 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
+  _slateOverlayWrapperEl: HTMLDivElement | null = null;
+
   public componentDidMount(): void {
     const { showCloseButton, backgroundImageUrl } = this.props;
 
@@ -60,26 +62,25 @@ export class Slate extends Component<SlateProps> {
       closeButtonEl.style['display'] = 'none';
     }
 
-    // handle background image
-    const overlayPortalEl = document.querySelector('.overlay-portal') as any;
-    const overlayContentsEl = document.querySelector('.playkit-overlay-contents') as any;
-    if (backgroundImageUrl && overlayPortalEl && overlayContentsEl) {
-      overlayPortalEl.style['background'] = `url(${backgroundImageUrl})`;
-      overlayPortalEl.style['background-size'] = 'contain';
-      overlayContentsEl.style['background-color'] = 'transparent';
+    // handle slate overlay wrapper background style
+    if (this._slateOverlayWrapperEl) {
+      if (backgroundImageUrl) {
+        this._slateOverlayWrapperEl.style['background-image'] = `url(${this.props.backgroundImageUrl})`;
+        this._slateOverlayWrapperEl.style['background-size'] = 'contain';
+      } else {
+        const overlayPortalEl = document.querySelector('.overlay-portal') as any;
+        if (overlayPortalEl && overlayPortalEl.children.length > 1) {
+          // if the overlayPortal contains more elements, in addition to the slate,
+          // need to blur the background of the slate to cover them properly
+          this._slateOverlayWrapperEl.style['background-color'] = 'rgba(0,0,0,0.7)';
+        }
+      }
     }
 
     if (this.props.timeout) {
       setTimeout(() => {
         this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
-    }
-  }
-
-  public componentWillUnmount(): void {
-    const overlayPortalEl = document.querySelector('.overlay-portal') as any;
-    if (this.props.backgroundImageUrl && overlayPortalEl) {
-      overlayPortalEl.style['background'] = '';
     }
   }
 
@@ -149,15 +150,17 @@ export class Slate extends Component<SlateProps> {
     const { onClose, showSpinner } = this.props;
     return (
       <OverlayPortal>
-        <Overlay open onClose={onClose}>
-          <div className={styles.slateRoot} data-testid="slate_root">
-            <div className={styles.slateContent} data-testid="slate_content">
-              {showSpinner ? <Spinner size={this.getSpinnerSize()} /> : undefined}
-              {this.renderTextArea()}
-              {this.renderButtons()}
+        <div className={styles.slateOverlayWrapper} ref={node => (this._slateOverlayWrapperEl = node)} data-testid="slate_overlay_wrapper">
+          <Overlay open onClose={onClose}>
+            <div className={styles.slateRoot} data-testid="slate_root">
+              <div className={styles.slateContent} data-testid="slate_content">
+                {showSpinner ? <Spinner size={this.getSpinnerSize()} /> : undefined}
+                {this.renderTextArea()}
+                {this.renderButtons()}
+              </div>
             </div>
-          </div>
-        </Overlay>
+          </Overlay>
+        </div>
       </OverlayPortal>
     );
   }

@@ -93,8 +93,7 @@ describe('Slate plugin', () => {
           backgroundImageUrl:
             'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100'
         });
-        cy.get('[data-testid="slate_root"]').should('exist');
-        cy.get('.overlay-portal')
+        cy.get('[data-testid="slate_overlay_wrapper"]').should('exist')
           .should('have.css', 'background')
           .and('include', 'https://cfvod.kaltura.com/p/3188353/sp/318835300/thumbnail/entry_id/1_vznuyyho/width/640/quality/100');
       });
