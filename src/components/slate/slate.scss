@@ -49,6 +49,12 @@
       }
     }
   }
+
+  &.slate-has-image {
+    .playkit-overlay .playkit-overlay-contents {
+      background-color: transparent;
+    }
+  }
 }
 
 :global {
@@ -57,6 +63,15 @@
     .slate-root .slate-text-area .slate-title {
       font-size: 18px;
       line-height: 20px;
+    }
+  }
+}
+
+:global(.overlay-portal) {
+  &:has(> :last-child:nth-child(2)) {
+    /* 2 elements */
+    .slate-overlay-wrapper-id {
+      background-color: rgba(0, 0, 0, 0.7);
     }
   }
 }
