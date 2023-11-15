@@ -51,7 +51,7 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
-  _slateOverlayWrapperEl: HTMLDivElement | null = null;
+  private _slateOverlayWrapperEl: HTMLDivElement | null = null;
 
   public componentDidMount(): void {
     const { showCloseButton, backgroundImageUrl } = this.props;
@@ -150,7 +150,11 @@ export class Slate extends Component<SlateProps> {
     const { onClose, showSpinner } = this.props;
     return (
       <OverlayPortal>
-        <div className={styles.slateOverlayWrapper} ref={node => (this._slateOverlayWrapperEl = node)} data-testid="slate_overlay_wrapper">
+        <div
+          className={styles.slateOverlayWrapper}
+          ref={(node): HTMLDivElement | null => (this._slateOverlayWrapperEl = node)}
+          data-testid="slate_overlay_wrapper"
+        >
           <Overlay open onClose={onClose}>
             <div className={styles.slateRoot} data-testid="slate_root">
               <div className={styles.slateContent} data-testid="slate_content">
