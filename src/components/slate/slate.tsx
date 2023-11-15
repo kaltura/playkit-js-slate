@@ -150,7 +150,7 @@ export class Slate extends Component<SlateProps> {
     const { onClose, showSpinner } = this.props;
     return (
       <OverlayPortal>
-        <div className={styles.slateOverlayWrapper} ref={node => (this._slateOverlayWrapperEl = node)}>
+        <div className={styles.slateOverlayWrapper} ref={node => (this._slateOverlayWrapperEl = node)} data-testid="slate_overlay_wrapper">
           <Overlay open onClose={onClose}>
             <div className={styles.slateRoot} data-testid="slate_root">
               <div className={styles.slateContent} data-testid="slate_content">
