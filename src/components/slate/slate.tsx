@@ -51,30 +51,13 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
-  private _slateOverlayWrapperEl: HTMLDivElement | null = null;
-
   public componentDidMount(): void {
-    const { showCloseButton, backgroundImageUrl } = this.props;
+    const { showCloseButton } = this.props;
 
     // handle overlay close button
     const closeButtonEl = document.querySelector('.playkit-close-overlay') as any;
     if (!showCloseButton && closeButtonEl) {
       closeButtonEl.style['display'] = 'none';
-    }
-
-    // handle slate overlay wrapper background style
-    if (this._slateOverlayWrapperEl) {
-      if (backgroundImageUrl) {
-        this._slateOverlayWrapperEl.style['background-image'] = `url(${this.props.backgroundImageUrl})`;
-        this._slateOverlayWrapperEl.style['background-size'] = 'contain';
-      } else {
-        const overlayPortalEl = document.querySelector('.overlay-portal') as any;
-        if (overlayPortalEl && overlayPortalEl.children.length > 1) {
-          // if the overlayPortal contains more elements, in addition to the slate,
-          // need to blur the background of the slate to cover them properly
-          this._slateOverlayWrapperEl.style['background-color'] = 'rgba(0,0,0,0.7)';
-        }
-      }
     }
 
     if (this.props.timeout) {
@@ -146,13 +129,26 @@ export class Slate extends Component<SlateProps> {
     return SPINNER_SIZE_M_L_PLAYER;
   }
 
+  private getSlateOverlayWrapperStyle(): any {
+    if (this.props.backgroundImageUrl) {
+      return {
+        backgroundImage: `url(${this.props.backgroundImageUrl})`,
+        backgroundSize: 'contain'
+      };
+    }
+    return null;
+  }
+
   public render(): ComponentChild {
-    const { onClose, showSpinner } = this.props;
+    const { onClose, showSpinner, backgroundImageUrl } = this.props;
+    const slateOverlayWrapperStyle = this.getSlateOverlayWrapperStyle();
     return (
       <OverlayPortal>
         <div
-          className={styles.slateOverlayWrapper}
-          ref={(node): HTMLDivElement | null => (this._slateOverlayWrapperEl = node)}
+          className={[styles.slateOverlayWrapper, 'slate-overlay-wrapper-id', backgroundImageUrl ? 'slate-has-image' : ''].join(
+            ' '
+          )}
+          style={slateOverlayWrapperStyle}
           data-testid="slate_overlay_wrapper"
         >
           <Overlay open onClose={onClose}>
