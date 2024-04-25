@@ -9,7 +9,7 @@ describe('Slate plugin', () => {
           message: 'Slate message'
         });
         cy.get('[data-testid="slate_root"]').should('exist');
-        cy.get('.slate-root .spinner-root').should('exist');
+        cy.get('[data-testid="spinner_container"]').should('exist');
         cy.get('[data-testid="slate_title"]').should('exist').should('have.text', 'Slate title');
         cy.get('[data-testid="slate_message"]').should('exist').should('have.text', 'Slate message');
         cy.get('[data-testid="slate_dismissButton"]').should('exist');
@@ -26,7 +26,7 @@ describe('Slate plugin', () => {
           showSpinner: false
         });
         cy.get('[data-testid="slate_root"]').should('exist');
-        cy.get('.slate-root .spinner-root').should('not.exist');
+        cy.get('[data-testid="spinner_container"]').should('not.exist');
       });
     });
 
