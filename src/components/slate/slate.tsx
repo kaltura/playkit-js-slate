@@ -155,7 +155,7 @@ export class Slate extends Component<SlateProps> {
             <div className={styles.slateRoot} data-testid="slate_root">
               <div className={styles.slateContent} data-testid="slate_content">
                 {showSpinner ? (
-                  <div data-testid="spinner_container">
+                  <div data-testid="slate_spinner_container">
                     <Spinner size={this.getSpinnerSize()} />
                   </div>
                 ) : undefined}
