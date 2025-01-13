@@ -126,3 +126,4 @@ playkit-js-slate is supported on:
 ## License
 
 playkit-js-slate is released under [Apache 2.0 License](LICENSE)
+
