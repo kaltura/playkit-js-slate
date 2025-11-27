@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@master
+    uses: kaltura/playkit-js-common/.github/workflows/cypress.yml@add-preinstall
     secrets: inherit
 
   notification:
