@@ -24,6 +24,7 @@ module.exports = (env, { mode }) => {
               {
                 loader: 'style-loader',
                 options: {
+                  injectType: "singletonStyleTag",
                   attributes: {
                     id: `${packageData.name}`
                   },
