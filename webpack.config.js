@@ -24,6 +24,7 @@ module.exports = (env, { mode }) => {
               {
                 loader: 'style-loader',
                 options: {
+                  injectType: "singletonStyleTag",
                   attributes: {
                     id: `${packageData.name}`
                   },
@@ -61,6 +62,7 @@ module.exports = (env, { mode }) => {
     },
     externals: {
       '@playkit-js/kaltura-player-js': 'root KalturaPlayer',
+      '@playkit-js/playkit-js': 'root KalturaPlayer.core',
       preact: 'root KalturaPlayer.ui.preact'
     },
     devServer: {
