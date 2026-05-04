@@ -1,0 +1,129 @@
+{
+  "repositoryName": "playkit-js-slate",
+  "packageName": "@playkit-js/slate",
+  "version": "1.0.7",
+  
+  "coreResponsibility": {
+    "summary": "A Kaltura Player UI plugin that provides a customizable slate overlay component for displaying informational messages, loading states, and interactive prompts during video playback.",
+    "type": "UI Plugin"
+  },
+  
+  "domainAndLogicOwnership": {
+    "featureOwnership": [
+      "Slate overlay display management",
+      "Player pause/resume state handling during slate display",
+      "Customizable slate content (title, message, background image)",
+      "Loading spinner display in slate overlay",
+      "Dismiss and close button interactions",
+      "Custom action button support with event dispatch",
+      "Slate timeout/auto-dismiss functionality",
+      "Pre-roll slate support via media metadata tags",
+      "Internationalization (i18n) for slate text labels"
+    ],
+    "dataHandling": [
+      "SlateOptions configuration object (title, message, backgroundImageUrl, showSpinner, timeout, buttons)",
+      "SlateConfig plugin configuration (imageOnMediaLoad, titleOnMediaLoad, messageOnMediaLoad, dismissTextOnMediaLoad)",
+      "Player playback state tracking (wasPlayed flag for resume behavior)",
+      "Player size state (from Redux store for responsive spinner sizing)",
+      "SlateEventTypes event dispatch (SLATE_CUSTOM_BUTTON_CLICKED)"
+    ],
+    "uiComponents": [
+      "Slate - Main overlay component with title, message, spinner, and buttons",
+      "SlateManager - Service class for adding/removing slates programmatically"
+    ]
+  },
+  
+  "integrationPoints": {
+    "upstream": [
+      "@playkit-js/kaltura-player-js - Core player providing BasePlugin, UI components, Redux store, and player controls",
+      "@playkit-js/playkit-js - Core playback engine providing FakeEvent and FakeEventTarget for event handling",
+      "@playkit-js/playkit-js-ui - UI framework providing Overlay component, preact i18n, Redux connect, and ReservedPresetAreas",
+      "@playkit-js/common - Shared UI components (Button, Spinner, OverlayPortal, A11yWrapper)"
+    ],
+    "downstream": [
+      "Host applications consuming Kaltura Player with slate plugin enabled",
+      "KMS (Kaltura Management System) edit pages using slate for presenter overlays",
+      "Any Kaltura Player integration requiring informational overlays during playback"
+    ],
+    "externalApis": []
+  },
+  
+  "technicalStack": {
+    "languages": ["TypeScript", "JavaScript", "SCSS"],
+    "frameworks": ["Preact", "Redux"],
+    "buildTools": ["Webpack", "Babel", "TypeScript Compiler"],
+    "testingTools": ["Cypress"],
+    "entryPoints": [
+      {
+        "file": "src/index.ts",
+        "purpose": "Plugin registration entry point - registers SlatePlugin with Kaltura Player"
+      },
+      {
+        "file": "src/slate-plugin.tsx",
+        "purpose": "Main plugin class extending BasePlugin - handles lifecycle, config, and SlateManager instantiation"
+      },
+      {
+        "file": "src/slate-manager/slate-manager.tsx",
+        "purpose": "Core service logic - manages slate overlay lifecycle (add/remove), pause/resume behavior, and event dispatch"
+      },
+      {
+        "file": "src/components/slate/slate.tsx",
+        "purpose": "Main UI component - renders overlay with title, message, spinner, and action buttons"
+      }
+    ],
+    "configurationFiles": [
+      "src/types/slate-options.ts",
+      "src/types/slate-config.ts"
+    ]
+  },
+  
+  "triageKeywords": [
+    "slate",
+    "slateManager",
+    "slate overlay",
+    "playkit-slate",
+    "@playkit-js/slate",
+    "slate_pre_roll",
+    "SlateCustomButtonClicked",
+    "slate dismiss button",
+    "slate close button",
+    "slate spinner",
+    "slate background image",
+    "slate timeout",
+    "slate message",
+    "slate title",
+    "player overlay message",
+    "informational overlay"
+  ],
+  
+  "errorPatterns": [
+    "getService('slateManager')",
+    "slateManager.add",
+    "slateManager.remove",
+    "slate_root",
+    "slate_overlay_wrapper",
+    "slate_dismissButton",
+    "slate_customizedActionButton",
+    "playkit-close-overlay",
+    "PLAYER_SIZE.TINY slate",
+    "SlateOptions",
+    "SlateConfig"
+  ],
+  
+  "relatedTicketPrefixes": [
+    "FEC-14873",
+    "FEC-13892",
+    "FEC-13483"
+  ],
+  
+  "browserCompatibility": [
+    "Chrome 39+ (Desktop/Android)",
+    "Firefox 41+ (Android), 42+ (Desktop)",
+    "IE11 (Windows 8.1+)",
+    "Edge (Windows 10+)",
+    "Safari 8+ (MacOS 10.10+)",
+    "Safari (iPadOS 13+)"
+  ],
+  
+  "license": "Apache-2.0"
+}
