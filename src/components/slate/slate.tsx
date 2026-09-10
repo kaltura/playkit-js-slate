@@ -34,6 +34,7 @@ type SlateProps = {
   dismissLabel?: string;
   onCustomizedActionClick: (action: string) => void;
   playerSize?: string;
+  targetId?: string;
 };
 
 const translates = {
@@ -41,7 +42,8 @@ const translates = {
 };
 
 const mapStateToProps = (state: Record<string, any>): void => ({
-  playerSize: state.shell.playerSize
+  playerSize: state.shell.playerSize,
+  targetId: state.config.targetId
 });
 
 const SPINNER_SIZE_EX_S_PLAYER = 32;
@@ -51,6 +53,9 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
+  private slateContentRef: HTMLDivElement | null = null;
+  private previouslyFocusedElement: HTMLElement | null = null;
+
   public componentDidMount(): void {
     const { showCloseButton } = this.props;
 
@@ -60,11 +65,53 @@ export class Slate extends Component<SlateProps> {
       closeButtonEl.style['display'] = 'none';
     }
 
+    // WCAG 2.4.3 (Focus Order) / 2.1.1 (Keyboard): the slate is a modal dialog, so focus has to move
+    // into it once it opens. Without this the playkit-js-ui Overlay tab trap never engages, since it
+    // can only cycle focus that is already inside, and keyboard users cannot reach the slate buttons.
+    this.previouslyFocusedElement = document.activeElement as HTMLElement;
+    // wait for the portal content to be painted before moving focus into it
+    requestAnimationFrame(() => {
+      // focus the content container rather than the first button, so the title and message are
+      // announced before the controls
+      this.slateContentRef?.focus();
+    });
+
     if (this.props.timeout) {
       setTimeout(() => {
         this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
     }
+  }
+
+  public componentWillUnmount(): void {
+    // WCAG 2.4.3: hand focus back to wherever it was before the slate opened
+    this.restorePreviousFocus();
+  }
+
+  private restorePreviousFocus(): void {
+    const previous = this.previouslyFocusedElement;
+    this.previouslyFocusedElement = null;
+    if (!previous || typeof previous.focus !== 'function') return;
+    if (document.body.contains(previous)) {
+      previous.focus();
+      return;
+    }
+    // the previously focused element was removed from the DOM while the slate was open, so fall back
+    // to the player container. It is not focusable on its own, hence the programmatic tabIndex.
+    const playerContainer = this.props.targetId ? document.getElementById(this.props.targetId) : null;
+    if (!playerContainer) return;
+    if (!playerContainer.hasAttribute('tabindex')) {
+      playerContainer.setAttribute('tabindex', '-1');
+    }
+    playerContainer.focus();
+  }
+
+  private getTitleId(): string {
+    return `${this.props.targetId || 'player'}-slate-title`;
+  }
+
+  private getMessageId(): string {
+    return `${this.props.targetId || 'player'}-slate-message`;
   }
 
   private renderButtons(): void {
@@ -110,12 +157,12 @@ export class Slate extends Component<SlateProps> {
     return (
       <div className={styles.slateTextArea}>
         {title && (
-          <div className={styles.slateTitle} data-testid="slate_title">
+          <div className={styles.slateTitle} id={this.getTitleId()} data-testid="slate_title">
             {title}
           </div>
         )}
         {message && (
-          <div data-testid="slate_message" className={styles.message}>
+          <div data-testid="slate_message" id={this.getMessageId()} className={styles.message}>
             {message}
           </div>
         )}
@@ -140,8 +187,16 @@ export class Slate extends Component<SlateProps> {
   }
 
   public render(): ComponentChild {
-    const { onClose, showSpinner, backgroundImageUrl } = this.props;
+    const { onClose, showSpinner, backgroundImageUrl, title, message } = this.props;
     const slateOverlayWrapperStyle = this.getSlateOverlayWrapperStyle();
+    // WCAG 4.1.2: name and describe the dialog from its own content
+    const ariaProps: Record<string, string> = {};
+    if (title) {
+      ariaProps.ariaLabelledBy = this.getTitleId();
+    }
+    if (message) {
+      ariaProps.ariaDescribedBy = this.getMessageId();
+    }
     return (
       <OverlayPortal>
         <div
@@ -151,9 +206,16 @@ export class Slate extends Component<SlateProps> {
           style={slateOverlayWrapperStyle}
           data-testid="slate_overlay_wrapper"
         >
-          <Overlay open onClose={onClose}>
+          <Overlay open onClose={onClose} {...ariaProps}>
             <div className={styles.slateRoot} data-testid="slate_root">
-              <div className={styles.slateContent} data-testid="slate_content">
+              <div
+                ref={(el): void => {
+                  this.slateContentRef = el;
+                }}
+                tabIndex={-1}
+                className={styles.slateContent}
+                data-testid="slate_content"
+              >
                 {showSpinner ? (
                   <div data-testid="slate_spinner_container">
                     <Spinner size={this.getSpinnerSize()} />

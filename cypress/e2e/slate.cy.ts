@@ -123,4 +123,81 @@ describe('Slate plugin', () => {
       });
     });
   });
+
+  // ADA-3053: keyboard users could not reach or activate the slate buttons
+  describe('accessibility', () => {
+    const gradebookSlateOptions = {
+      title: 'Well done!',
+      message: 'Your score is now documented in the gradebook',
+      showDismissButton: false,
+      showCloseButton: false,
+      showSpinner: false,
+      customizedActionButtonText: 'Done'
+    };
+
+    it('should move focus into the slate content when the slate opens', () => {
+      loadPlayer().then((player) => {
+        player.getService('slateManager')?.add(gradebookSlateOptions);
+        cy.get('[data-testid="slate_content"]').should('exist').should('have.focus');
+      });
+    });
+
+    it('should keep the customized action button focusable inside the focused slate', () => {
+      loadPlayer().then((player) => {
+        player.getService('slateManager')?.add(gradebookSlateOptions);
+        cy.get('[data-testid="slate_content"]').should('have.focus');
+        cy.get('[data-testid="slate_customizedActionButton"]').should('exist').focus().should('have.focus');
+      });
+    });
+
+    it('should dispatch SlateCustomButtonClicked when the action button is activated by keyboard', () => {
+      loadPlayer().then((player) => {
+        const slateManager = player.getService('slateManager');
+        const onCustomButtonClicked = cy.spy().as('onCustomButtonClicked');
+        slateManager?.addEventListener('SlateCustomButtonClicked', onCustomButtonClicked);
+        slateManager?.add(gradebookSlateOptions);
+        cy.get('[data-testid="slate_customizedActionButton"]')
+          .should('exist')
+          .focus()
+          .trigger('keydown', { keyCode: 13, key: 'Enter', bubbles: true });
+        cy.get('@onCustomButtonClicked').should('have.been.calledOnce');
+      });
+    });
+
+    it('should dispatch SlateCustomButtonClicked when the action button is activated with Space', () => {
+      loadPlayer().then((player) => {
+        const slateManager = player.getService('slateManager');
+        const onCustomButtonClicked = cy.spy().as('onCustomButtonClickedSpace');
+        slateManager?.addEventListener('SlateCustomButtonClicked', onCustomButtonClicked);
+        slateManager?.add(gradebookSlateOptions);
+        cy.get('[data-testid="slate_customizedActionButton"]')
+          .should('exist')
+          .focus()
+          .trigger('keydown', { keyCode: 32, key: ' ', bubbles: true });
+        cy.get('@onCustomButtonClickedSpace').should('have.been.calledOnce');
+      });
+    });
+
+    it('should label and describe the dialog from the slate title and message', () => {
+      loadPlayer().then((player) => {
+        player.getService('slateManager')?.add({
+          title: 'Slate title',
+          message: 'Slate message',
+          showSpinner: false
+        });
+        cy.get('[data-testid="slate_title"]')
+          .invoke('attr', 'id')
+          .then((titleId) => {
+            cy.get('[data-testid="slate_message"]')
+              .invoke('attr', 'id')
+              .then((messageId) => {
+                cy.get('[data-testid="slate_root"]')
+                  .closest('[role="dialog"]')
+                  .should('have.attr', 'aria-labelledby', titleId)
+                  .should('have.attr', 'aria-describedby', messageId);
+              });
+          });
+      });
+    });
+  });
 });
