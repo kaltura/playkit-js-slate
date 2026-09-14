@@ -34,14 +34,17 @@ type SlateProps = {
   dismissLabel?: string;
   onCustomizedActionClick: (action: string) => void;
   playerSize?: string;
+  targetId?: string;
+  previouslyFocusedElement?: HTMLElement | null;
 };
 
 const translates = {
   dismissLabel: <Text id="slate.dismiss">Dismiss</Text>
 };
 
-const mapStateToProps = (state: Record<string, any>): void => ({
-  playerSize: state.shell.playerSize
+const mapStateToProps = (state: Record<string, any>) => ({
+  playerSize: state.shell.playerSize,
+  targetId: state.config.targetId
 });
 
 const SPINNER_SIZE_EX_S_PLAYER = 32;
@@ -51,8 +54,22 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
+  private static activeSlate: Slate | null = null;
+  private slateOverlayWrapper: HTMLDivElement | null = null;
+  private previouslyFocusedElement: HTMLElement | null;
+
+  private getTitleId(): string {
+    return `${this.props.targetId || 'player'}-slate-title`;
+  }
+
+  private getMessageId(): string {
+    return `${this.props.targetId || 'player'}-slate-message`;
+  }
+
   public componentDidMount(): void {
     const { showCloseButton } = this.props;
+    Slate.activeSlate = this;
+    this.previouslyFocusedElement = this.props.previouslyFocusedElement || null;
 
     // handle overlay close button
     const closeButtonEl = document.querySelector('.playkit-close-overlay') as any;
@@ -60,11 +77,38 @@ export class Slate extends Component<SlateProps> {
       closeButtonEl.style['display'] = 'none';
     }
 
+    const focusableElement = Array.from(
+      this.slateOverlayWrapper?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ) || []
+    ).find((element) => element.getClientRects().length > 0);
+    const dialog = this.slateOverlayWrapper?.querySelector<HTMLElement>('[role="dialog"]');
+    (focusableElement || dialog)?.focus();
+
+    if (this.props.title) {
+      this.slateOverlayWrapper?.querySelector('[role="dialog"]')?.setAttribute('aria-labelledby', this.getTitleId());
+    }
+    if (this.props.message) {
+      this.slateOverlayWrapper?.querySelector('[role="dialog"]')?.setAttribute('aria-describedby', this.getMessageId());
+    }
+
     if (this.props.timeout) {
       setTimeout(() => {
         this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
     }
+  }
+
+  public componentWillUnmount(): void {
+    const previouslyFocusedElement = this.previouslyFocusedElement;
+    setTimeout(() => {
+      if (Slate.activeSlate === this) {
+        Slate.activeSlate = null;
+        if (previouslyFocusedElement && document.contains(previouslyFocusedElement)) {
+          previouslyFocusedElement.focus();
+        }
+      }
+    });
   }
 
   private renderButtons(): void {
@@ -110,12 +154,12 @@ export class Slate extends Component<SlateProps> {
     return (
       <div className={styles.slateTextArea}>
         {title && (
-          <div className={styles.slateTitle} data-testid="slate_title">
+          <div role="heading" aria-level={2} className={styles.slateTitle} id={this.getTitleId()} data-testid="slate_title">
             {title}
           </div>
         )}
         {message && (
-          <div data-testid="slate_message" className={styles.message}>
+          <div data-testid="slate_message" id={this.getMessageId()} className={styles.message}>
             {message}
           </div>
         )}
@@ -145,6 +189,9 @@ export class Slate extends Component<SlateProps> {
     return (
       <OverlayPortal>
         <div
+          ref={(element): void => {
+            this.slateOverlayWrapper = element;
+          }}
           className={[styles.slateOverlayWrapper, 'slate-overlay-wrapper-id', backgroundImageUrl ? 'slate-has-image' : ''].join(
             ' '
           )}
