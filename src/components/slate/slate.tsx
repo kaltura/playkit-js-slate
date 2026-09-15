@@ -32,14 +32,17 @@ type SlateProps = {
   dismissButtonText?: string;
   customizedActionButtonText?: string;
   dismissLabel?: string;
+  fallbackLabel?: string;
   onCustomizedActionClick: (action: string) => void;
   playerSize?: string;
   targetId?: string;
   previouslyFocusedElement?: HTMLElement | null;
+  isCurrentSlate?: () => boolean;
 };
 
 const translates = {
-  dismissLabel: <Text id="slate.dismiss">Dismiss</Text>
+  dismissLabel: <Text id="slate.dismiss">Dismiss</Text>,
+  fallbackLabel: <Text id="slate.fallbackLabel">Slate message</Text>
 };
 
 const mapStateToProps = (state: Record<string, any>) => ({
@@ -54,7 +57,6 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 @connect(mapStateToProps)
 @withText(translates)
 export class Slate extends Component<SlateProps> {
-  private static activeSlate: Slate | null = null;
   private slateOverlayWrapper: HTMLDivElement | null = null;
   private previouslyFocusedElement: HTMLElement | null;
 
@@ -68,7 +70,6 @@ export class Slate extends Component<SlateProps> {
 
   public componentDidMount(): void {
     const { showCloseButton } = this.props;
-    Slate.activeSlate = this;
     this.previouslyFocusedElement = this.props.previouslyFocusedElement || null;
 
     // handle overlay close button
@@ -87,6 +88,8 @@ export class Slate extends Component<SlateProps> {
 
     if (this.props.title) {
       this.slateOverlayWrapper?.querySelector('[role="dialog"]')?.setAttribute('aria-labelledby', this.getTitleId());
+    } else if (this.props.fallbackLabel) {
+      this.slateOverlayWrapper?.querySelector('[role="dialog"]')?.setAttribute('aria-label', this.props.fallbackLabel);
     }
     if (this.props.message) {
       this.slateOverlayWrapper?.querySelector('[role="dialog"]')?.setAttribute('aria-describedby', this.getMessageId());
@@ -102,11 +105,8 @@ export class Slate extends Component<SlateProps> {
   public componentWillUnmount(): void {
     const previouslyFocusedElement = this.previouslyFocusedElement;
     setTimeout(() => {
-      if (Slate.activeSlate === this) {
-        Slate.activeSlate = null;
-        if (previouslyFocusedElement && document.contains(previouslyFocusedElement)) {
-          previouslyFocusedElement.focus();
-        }
+      if (this.props.isCurrentSlate?.() && previouslyFocusedElement && document.contains(previouslyFocusedElement)) {
+        previouslyFocusedElement.focus();
       }
     });
   }
