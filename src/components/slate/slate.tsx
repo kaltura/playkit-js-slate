@@ -68,6 +68,14 @@ export class Slate extends Component<SlateProps> {
     return `${this.props.targetId || 'player'}-slate-message`;
   }
 
+  private handleKeyDown = (event: KeyboardEvent): void => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.props.onClose(new MouseEvent('click'), false);
+    }
+  };
+
   public componentDidMount(): void {
     const { showCloseButton } = this.props;
     this.previouslyFocusedElement = this.props.previouslyFocusedElement || null;
@@ -198,7 +206,7 @@ export class Slate extends Component<SlateProps> {
           style={slateOverlayWrapperStyle}
           data-testid="slate_overlay_wrapper"
         >
-          <Overlay open onClose={onClose}>
+          <Overlay open onClose={onClose} handleKeyDown={this.handleKeyDown}>
             <div className={styles.slateRoot} data-testid="slate_root">
               <div className={styles.slateContent} data-testid="slate_content">
                 {showSpinner ? (
