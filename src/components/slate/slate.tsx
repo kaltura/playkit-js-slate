@@ -59,6 +59,7 @@ const SPINNER_SIZE_M_L_PLAYER = 48;
 export class Slate extends Component<SlateProps> {
   private slateOverlayWrapper: HTMLDivElement | null = null;
   private previouslyFocusedElement: HTMLElement | null;
+  private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   private getTitleId(): string {
     return `${this.props.targetId || 'player'}-slate-title`;
@@ -104,13 +105,19 @@ export class Slate extends Component<SlateProps> {
     }
 
     if (this.props.timeout) {
-      setTimeout(() => {
+      this.closeTimeoutId = setTimeout(() => {
+        this.closeTimeoutId = null;
         this.props.onClose(new MouseEvent('click'), false);
       }, this.props.timeout);
     }
   }
 
   public componentWillUnmount(): void {
+    if (this.closeTimeoutId !== null) {
+      clearTimeout(this.closeTimeoutId);
+      this.closeTimeoutId = null;
+    }
+
     const previouslyFocusedElement = this.previouslyFocusedElement;
     setTimeout(() => {
       if (this.props.isCurrentSlate?.() && previouslyFocusedElement && document.contains(previouslyFocusedElement)) {
