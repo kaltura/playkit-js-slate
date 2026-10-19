@@ -17,6 +17,8 @@ const { PLAYER_SIZE } = components;
 export class SlateManager extends FakeEventTarget {
   private wasPlayed = false; // keep state of the player so we can resume if needed
   private removeActiveOverlay: null | (() => void) = null;
+  private previouslyFocusedElement: HTMLElement | null = null;
+  private currentSlateToken = 0;
   private store: any;
 
   constructor(private player: KalturaPlayer, private logger: Logger) {
@@ -26,6 +28,11 @@ export class SlateManager extends FakeEventTarget {
 
   public add(options?: SlateOptions): void {
     if (this.store.getState().shell.playerSize === PLAYER_SIZE.TINY) return;
+    const slateToken = ++this.currentSlateToken;
+    if (!this.removeActiveOverlay) {
+      const activeElement = document.activeElement;
+      this.previouslyFocusedElement = activeElement instanceof HTMLElement ? activeElement : null;
+    }
     if (!this.player.paused) {
       this.player.pause();
       this.wasPlayed = true;
@@ -48,6 +55,8 @@ export class SlateManager extends FakeEventTarget {
             showSpinner={options?.showSpinner !== undefined ? options.showSpinner : true}
             customizedActionButtonText={options?.customizedActionButtonText}
             onCustomizedActionClick={(): void => this.onCustomizedActionClick()}
+            previouslyFocusedElement={this.previouslyFocusedElement}
+            isCurrentSlate={(): boolean => this.currentSlateToken === slateToken}
           />
         )
       })
@@ -72,6 +81,7 @@ export class SlateManager extends FakeEventTarget {
 
   private onCloseHandler(): void {
     this.removeOverlay();
+    this.previouslyFocusedElement = null;
     if (this.wasPlayed) {
       this.player.play();
       this.wasPlayed = false;

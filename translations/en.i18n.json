@@ -1,7 +1,8 @@
 {
   "en": {
     "slate": {
-      "greeting": "Welcome"
+      "greeting": "Welcome",
+      "fallbackLabel": "Slate message"
     }
   }
 }
